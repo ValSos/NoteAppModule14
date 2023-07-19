@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Map;
-
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/note")
@@ -36,12 +34,9 @@ public class NoteController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/edit", consumes = "application/x-www-form-urlencoded")
-    public ModelAndView editNote(@RequestParam Map<String, String> reqParams) {
-        Note note = new Note(Long.parseLong(reqParams.get("id")), reqParams.get("title"),reqParams.get("content"));
+    @PostMapping("/edit")
+    public ModelAndView editNote(@ModelAttribute Note note)  {
         noteService.update(note);
-        ModelAndView modelAndView = new ModelAndView("redirect:/note/list");
-        modelAndView.addObject("notes", noteService.listAll());
-        return modelAndView;
+        return new ModelAndView("redirect:/note/list");
     }
 }
